@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Xml.Linq;
 
 namespace TexTalkAPI.Classes
 {
@@ -12,12 +14,12 @@ namespace TexTalkAPI.Classes
         public string IngressText { get; set; }
 
         [DataMember]
-        public string BodyText { get; set; }
+        public IEnumerable<XElement> BodyText { get; set; }
 
         [DataMember]
         public string ImagePath { get; set; }
 
         [DataMember]
-        public int DisplayIndex { get; set; }
+        public int? DisplayIndex { get; set; }
     }
 }

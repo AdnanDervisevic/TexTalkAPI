@@ -1,8 +1,6 @@
-using System;
 using System.Web.Http;
 using System.Web.Mvc;
 using TexTalkAPI.Areas.HelpPage.ModelDescriptions;
-using TexTalkAPI.Areas.HelpPage.Models;
 
 namespace TexTalkAPI.Areas.HelpPage.Controllers
 {
@@ -23,7 +21,7 @@ namespace TexTalkAPI.Areas.HelpPage.Controllers
             Configuration = config;
         }
 
-        public HttpConfiguration Configuration { get; private set; }
+        public HttpConfiguration Configuration { get; }
 
         public ActionResult Index()
         {
@@ -33,31 +31,21 @@ namespace TexTalkAPI.Areas.HelpPage.Controllers
 
         public ActionResult Api(string apiId)
         {
-            if (!String.IsNullOrEmpty(apiId))
-            {
-                HelpPageApiModel apiModel = Configuration.GetHelpPageApiModel(apiId);
-                if (apiModel != null)
-                {
-                    return View(apiModel);
-                }
-            }
+            if (string.IsNullOrEmpty(apiId))
+                return View(ErrorViewName);
+            var apiModel = Configuration.GetHelpPageApiModel(apiId);
 
-            return View(ErrorViewName);
+            return apiModel != null ? View(apiModel) : View(ErrorViewName);
         }
 
         public ActionResult ResourceModel(string modelName)
         {
-            if (!String.IsNullOrEmpty(modelName))
-            {
-                ModelDescriptionGenerator modelDescriptionGenerator = Configuration.GetModelDescriptionGenerator();
-                ModelDescription modelDescription;
-                if (modelDescriptionGenerator.GeneratedModels.TryGetValue(modelName, out modelDescription))
-                {
-                    return View(modelDescription);
-                }
-            }
+            if (string.IsNullOrEmpty(modelName))
+                return View(ErrorViewName);
 
-            return View(ErrorViewName);
+            var modelDescriptionGenerator = Configuration.GetModelDescriptionGenerator();
+            ModelDescription modelDescription;
+            return modelDescriptionGenerator.GeneratedModels.TryGetValue(modelName, out modelDescription) ? View(modelDescription) : View(ErrorViewName);
         }
     }
 }
