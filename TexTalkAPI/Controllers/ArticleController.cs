@@ -8,7 +8,7 @@ using TexTalkAPI.Classes;
 
 namespace TexTalkAPI.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     [RoutePrefix("api/Article")]
     public class ArticleController : ApiController
     {
